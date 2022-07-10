@@ -19,12 +19,12 @@ func updatePalette(w http.ResponseWriter, r *http.Request) {
 
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		fmt.Fprintf(w, "Unable to read request body, please make sure the request is formatted correctly")
+		fmt.Fprintf(w, "Unable to read request body, please make sure the request is formatted correctly.")
 	}
 
 	err = json.Unmarshal(reqBody, &newPalette)
 	if err != nil {
-		fmt.Fprintf(w, "Unable to Unmarshal json, please make sure the request is formatted correctly")
+		fmt.Fprintf(w, "Unable to Unmarshal json, please make sure the request is formatted correctly.")
 	}
 
 	newColors, exists := PaletteToColors[newPalette.NewPalette]
