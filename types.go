@@ -62,7 +62,8 @@ const (
 	DefaultPattern    Pattern = "Default"
 	Solid             Pattern = "Solid"
 	Alternating       Pattern = "Alternating"
-	Gradient          Pattern = "Gradient"
+	SingleGradient    Pattern = "SingleGradient"
+	DoubleGradient    Pattern = "DoubleGradient"
 	DoubleAlternating Pattern = "DoubleAlternating"
 )
 

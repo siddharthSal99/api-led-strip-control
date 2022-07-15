@@ -26,7 +26,7 @@ var PaletteToColors = map[string]ColorCombination{
 var PatternSet = map[string]Pattern{
 	"Solid":             Solid,
 	"Alternating":       Alternating,
-	"Gradient":          Gradient,
+	"SingleGradient":    SingleGradient,
 	"DoubleAlternating": DoubleAlternating,
 }
 
