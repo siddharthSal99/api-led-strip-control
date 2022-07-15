@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -58,6 +59,7 @@ func homeLink(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	router := mux.NewRouter().StrictSlash(true)
+	port := os.Getenv("PORT")
 
 	// called by web app client
 	router.HandleFunc("/", homeLink)
@@ -84,6 +86,6 @@ func main() {
 	// CORS Preflight Handler
 	router.Methods("OPTIONS").HandlerFunc(corsHandler)
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":"+port, router))
 
 }
