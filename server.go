@@ -37,7 +37,7 @@ var ForcedStateSet = map[string]EnableState{
 	"Interval":  Interval,
 }
 
-var loc, _ = time.LoadLocation("EST")
+var loc, _ = time.LoadLocation("America/New_York")
 
 var currState = LEDStripState{
 	Colors: ColorCombination{
@@ -60,6 +60,9 @@ func main() {
 
 	router := mux.NewRouter().StrictSlash(true)
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 
 	// called by web app client
 	router.HandleFunc("/", homeLink)

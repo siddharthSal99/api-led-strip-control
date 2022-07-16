@@ -31,13 +31,13 @@ var usernameToAuthLevel map[string]AuthLevel = map[string]AuthLevel{
 
 var currentAuthLevel AuthLevel = NotLoggedIn
 var currentUser = ""
-var lastLogin time.Time = time.Now()
+var lastLogin time.Time = time.Now().In(loc)
 
 func login(w http.ResponseWriter, r *http.Request) {
 	mutex.Lock()
 	enableCors(&w)
 
-	timeSinceLastLogin := time.Now().Sub(lastLogin)
+	timeSinceLastLogin := time.Now().In(loc).Sub(lastLogin)
 
 	if timeSinceLastLogin.Hours() > float64(MaxLoginAge) {
 		currentAuthLevel = NotLoggedIn
@@ -69,7 +69,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 			success = true
 			message = "Login Success"
 			resp["username"] = currentUser
-			lastLogin = time.Now()
+			lastLogin = time.Now().In(loc)
 		} else {
 			success = false
 			message = "Login Failed: Please verify username and password"
@@ -96,7 +96,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 }
 
 func isLoggedIn() bool {
-	timeSinceLastLogin := time.Now().Sub(lastLogin)
+	timeSinceLastLogin := time.Now().In(loc).Sub(lastLogin)
 	loggedIn := (currentAuthLevel != NotLoggedIn) && (timeSinceLastLogin.Hours() <= float64(MaxLoginAge))
 
 	return loggedIn

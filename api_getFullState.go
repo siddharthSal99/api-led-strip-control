@@ -14,19 +14,20 @@ func getFullState(w http.ResponseWriter, r *http.Request) {
 	resp := make(map[string]interface{})
 
 	intervalValid := false
+	currTime := time.Now().In(loc)
 
-	if hourIntervalValid := time.Now().Hour() > currState.StartTime.Hour() && time.Now().Hour() < currState.EndTime.Hour(); hourIntervalValid {
+	if hourIntervalValid := currTime.Hour() > currState.StartTime.Hour() && currTime.Hour() < currState.EndTime.Hour(); hourIntervalValid {
 		intervalValid = true
-	} else if (time.Now().Hour() == currState.StartTime.Hour()) || (time.Now().Hour() == currState.EndTime.Hour()) {
-		if minuteIntervalValid := time.Now().Minute() >= currState.StartTime.Minute() && time.Now().Minute() <= currState.EndTime.Minute(); minuteIntervalValid {
+	} else if (currTime.Hour() == currState.StartTime.Hour()) || (currTime.Hour() == currState.EndTime.Hour()) {
+		if minuteIntervalValid := currTime.Minute() >= currState.StartTime.Minute() && currTime.Minute() <= currState.EndTime.Minute(); minuteIntervalValid {
 			intervalValid = true
 		}
 	}
 
 	isEnabled := ((intervalValid && currState.ForcedState == Interval) || currState.ForcedState == AlwaysOn) && (currState.ForcedState != AlwaysOff)
 
-	resp["time"] = fmt.Sprintf("%v", time.Now())
-	resp["enabled"] = isEnabled //fmt.Sprintf("%v", time.Now())
+	resp["time"] = fmt.Sprintf("%v", currTime)
+	resp["enabled"] = isEnabled //fmt.Sprintf("%v", currTime)
 	resp["start-time"] = fmt.Sprintf("%s", currState.StartTime.Format(layoutTime))
 	resp["colors"] = currState.Colors
 	resp["pattern"] = fmt.Sprintf("%s", currState.DisplayPattern)

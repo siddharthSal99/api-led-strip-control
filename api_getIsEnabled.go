@@ -15,18 +15,44 @@ func isEnabled(w http.ResponseWriter, r *http.Request) {
 
 	intervalValid := false
 
-	if hourIntervalValid := time.Now().Hour() > currState.StartTime.Hour() && time.Now().Hour() < currState.EndTime.Hour(); hourIntervalValid {
+	currTime := time.Now().In(loc)
+
+	/*
+		if currTime.Hour() is less than endTime.Hour() and greater than startTime.Hour() set to true
+		else if currTime.Hour() == startTime.Hour()
+			if currTime.Hour == endTime.hour()
+				set to currTime.Minute is within minute interval
+			else
+				set to currTime.Minute() > startTime.Minute()
+		else if currTime.Hour == endTime.hour()
+				set to currTime.Minute() < endTime.Minute()
+
+	*/
+
+	if currTime.Hour() > currState.StartTime.Hour() && currTime.Hour() < currState.EndTime.Hour() {
 		intervalValid = true
-	} else if (time.Now().Hour() == currState.StartTime.Hour()) || (time.Now().Hour() == currState.EndTime.Hour()) {
-		if minuteIntervalValid := time.Now().Minute() >= currState.StartTime.Minute() && time.Now().Minute() <= currState.EndTime.Minute(); minuteIntervalValid {
-			intervalValid = true
+	} else if currTime.Hour() == currState.StartTime.Hour() {
+		if currTime.Hour() == currState.EndTime.Hour() {
+			intervalValid = currTime.Minute() >= currState.StartTime.Minute() && currTime.Minute() <= currState.EndTime.Minute()
+		} else {
+			intervalValid = currTime.Minute() >= currState.StartTime.Minute()
 		}
+	} else if currTime.Hour() == currState.EndTime.Hour() {
+		intervalValid = currTime.Minute() <= currState.EndTime.Minute()
 	}
+
+	// hh := currTime.Hour()
+	// jj := currState.StartTime.Hour()
+
+	// hm := currTime.Minute()
+	// jm := currState.StartTime.Minute()
+
+	// log.Printf("%v %v %v %v", hh, jj, hm, jm)
 
 	isEnabled := ((intervalValid && currState.ForcedState == Interval) || currState.ForcedState == AlwaysOn) && (currState.ForcedState != AlwaysOff)
 
-	resp["time"] = fmt.Sprintf("%v", time.Now())
-	resp["enabled"] = isEnabled //fmt.Sprintf("%v", time.Now())
+	resp["time"] = fmt.Sprintf("%v", currTime)
+	resp["enabled"] = isEnabled //fmt.Sprintf("%v", currTime)
 	resp["forced-state"] = currState.ForcedState
 
 	jsonResp, err := json.Marshal(resp)
