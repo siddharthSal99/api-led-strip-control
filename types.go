@@ -65,6 +65,8 @@ const (
 	SingleGradient    Pattern = "SingleGradient"
 	DoubleGradient    Pattern = "DoubleGradient"
 	DoubleAlternating Pattern = "DoubleAlternating"
+	ReturnGradient    Pattern = "ReturnGradient"
+	AlternateGradient Pattern = "AlternateGradient"
 )
 
 const (

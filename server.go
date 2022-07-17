@@ -29,6 +29,9 @@ var PatternSet = map[string]Pattern{
 	"Alternating":       Alternating,
 	"SingleGradient":    SingleGradient,
 	"DoubleAlternating": DoubleAlternating,
+	"DoubleGradient":    DoubleGradient,
+	"ReturnGradient":    ReturnGradient,
+	"AlternateGradient": AlternateGradient,
 }
 
 var ForcedStateSet = map[string]EnableState{
